@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR="/home/$USER/graphite-api-docker"
+DIR="/home/$USER/graphite-api-singularity"
 cd $dir
 [[ -d index ]] || mkdir index
 [[ -d logs ]] || mkdir logs
