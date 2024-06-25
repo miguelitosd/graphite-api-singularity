@@ -5,7 +5,7 @@ After upgrading to ubuntu 24.04LTS I found that while the rest of the pre-existi
 * carbon-cache
 * graphite-web
 
-etc, but there's no updated build for graphite-api.  Even the pip installed version would run for me, but 
+etc, there's no updated build for graphite-api.  Even the pip installed version would run for me, but 
 threw errors and trying to us it as a data source for grafana threw errors.  I have some historical data
 I didn't want to lose however, so I really wanted to get graphite working.
 
@@ -14,6 +14,10 @@ a container a shot.  Using docker on ubuntu now is a snap based install which se
 like you can't write to any data paths outside /home by default. So since we use singularity at work and find
 that it's a great solution for basically wrapping an app in a container that's basically the older distro libraries 
 and such, I figured it was worth a try.  It was actually pretty quick and simple to get it working as desired.
+
+With this solution I was able to leave the whisper data in the same path as before with carbon-cache still writing
+there without any changes to how it works.  The binding simply has the graphite-api bits inside the container read
+those whisper files (the only thing is to ensure you have permissions to read them)
 
 # To install/use:
 Packages needed to run as-is:
