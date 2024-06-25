@@ -1,0 +1,24 @@
+BootStrap: docker-daemon
+From: ubuntu:jammy
+
+%post
+    apt-get update
+    apt-get install -y curl graphite-api bash gunicorn python3-gunicorn
+    if [ -f /etc/graphite-api.yaml ]; then rm -f /etc/graphite-api.yaml; fi
+    echo "search_index: /var/lib/graphite-api/index" > /etc/graphite-api.yaml
+    echo "whisper:" >> /etc/graphite-api.yaml
+    echo "  directories:" >> /etc/graphite-api.yaml
+    echo "      - /var/lib/graphite/whisper"  >> /etc/graphite-api.yaml
+    echo "time_zone: America/Los_Angeles" >> /etc/graphite-api.yaml
+    echo "" >> /etc/graphite-api.yaml
+
+%environment
+    export DEBIAN_FRONTEND=noninteractive
+
+%runscript
+    export DAEMON_ARGS="--bind=127.0.0.1:8542 $DAEMON_ARGS"
+    export TZ="America/Los_Angeles"
+    /usr/bin/gunicorn3 --bind=127.0.0.1:8542 --name=graphite-api graphite_api.app:app > /var/log/graphite/stdout 2> /var/log/graphite/stderr
+
+%labels
+    Mike Marion <mm-github@miguelito.org>
